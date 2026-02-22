@@ -1,0 +1,39 @@
+body {
+  background: #0f1115;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  padding: 30px;
+}
+
+h1 { margin-bottom: 20px; }
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+select {
+  padding: 10px;
+  background: #1c1f26;
+  color: white;
+  border: 1px solid #333;
+  border-radius: 6px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #151820;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+}
+
+th { background: #1f2330; color: #aaa; }
+
+tr:nth-child(even) { background: #131622; }
