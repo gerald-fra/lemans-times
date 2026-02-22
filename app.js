@@ -6,52 +6,63 @@ const table = document.getElementById("table");
 
 let data = [];
 
-// Charger les données depuis la Sheet
 fetch(SHEET_URL)
-  .then(res => res.json())
-  .then(rows => data = rows);
+    .then(res => res.json())
+    .then(rows => data = rows);
 
-// Mettre à jour le tableau
+const circuitImages = {
+    "Bahrain": "img/bahrain.jpg",
+    "Le Mans": "img/le-mans.jpg",
+    "Paul Ricard": "img/paul-ricard.jpg"
+    // Ajoute toutes les photos des circuits ici
+};
+
+const categoryIcons = {
+    "Hypercar": "img/hypercar.png",
+    "LMP2": "img/lmp2.png",
+    "GTE": "img/gte.png",
+    "GT3": "img/gt3.png",
+    "LMP3": "img/lmp3.png"
+};
+
 function updateTable() {
-  const circuit = circuitSelect.value;
-  const category = categorySelect.value;
+    const circuit = circuitSelect.value;
+    const category = categorySelect.value;
 
-  if (!circuit || !category) {
-    table.innerHTML = "";
-    return;
-  }
-
-  // Filtrer par circuit et catégorie
-  let filtered = data.filter(r => r.Circuit === circuit && r.Catégorie === category);
-
-  // Garder uniquement le meilleur temps par pilote
-  const bestByPilot = [];
-  filtered.forEach(r => {
-    const existing = bestByPilot.find(e => e["Nom Prénom"] === r["Nom Prénom"]);
-    if (!existing) {
-      bestByPilot.push(r);
-    } else {
-      // Comparer les temps : garder le plus petit
-      if (r.Temps < existing.Temps) {
-        const index = bestByPilot.indexOf(existing);
-        bestByPilot[index] = r;
-      }
+    if (!circuit || !category) {
+        table.innerHTML = "";
+        return;
     }
-  });
 
-  // Trier par temps
-  const classement = bestByPilot.sort((a, b) => a.Temps.localeCompare(b.Temps));
+    let filtered = data.filter(r => r.Circuit === circuit && r.Catégorie === category);
 
-  // Afficher dans le tableau
-  table.innerHTML = classement.map((r, i) => `
-    <tr>
-      <td>${i + 1}</td>
-      <td>${r["Nom Prénom"]}</td>
-      <td>${r.Temps}</td>
-    </tr>
-  `).join("");
+    const bestByPilot = [];
+    filtered.forEach(r => {
+        const existing = bestByPilot.find(e => e["Nom Prénom"] === r["Nom Prénom"]);
+        if (!existing) {
+            bestByPilot.push(r);
+        } else {
+            if (r.Temps < existing.Temps) {
+                const index = bestByPilot.indexOf(existing);
+                bestByPilot[index] = r;
+            }
+        }
+    });
+
+    const classement = bestByPilot.sort((a, b) => a.Temps.localeCompare(b.Temps));
+
+    table.innerHTML = classement.map((r, i) => `
+        <tr>
+            <td>${i + 1}</td>
+            <td>
+                <img src="${circuitImages[r.Circuit]}" class="circuit-img" alt="${r.Circuit}">
+                <img src="${categoryIcons[r.Catégorie]}" class="cat-icon" alt="${r.Catégorie}">
+                ${r["Nom Prénom"]}
+            </td>
+            <td>${r.Temps}</td>
+        </tr>
+    `).join("");
 }
 
-// Mettre à jour quand l’utilisateur change le circuit ou la catégorie
 circuitSelect.addEventListener("change", updateTable);
 categorySelect.addEventListener("change", updateTable);
