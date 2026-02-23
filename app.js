@@ -43,12 +43,6 @@ function getClassement(time, refs) {
     return ["row-out", "—"];
 }
 
-function timeToSeconds(t) {
-    if (!t) return null;
-    const [min, rest] = t.split(":");
-    return parseInt(min, 10) * 60 + parseFloat(rest);
-}
-
 function updateTable() {
     const circuit = circuitSelect.value;
     const category = categorySelect.value;
@@ -91,21 +85,11 @@ function updateTable() {
     const classement = Object.values(best)
         .sort((a, b) => a.Temps.localeCompare(b.Temps));
 
-    // ⏱ Temps du leader (1er du classement)
-    const leaderSec = timeToSeconds(classement[0]?.Temps);
-
     // 6️⃣ Affichage final
     table.innerHTML = classement.map((r, i) => {
-    const [rowClass, badge] = getClassement(r.Temps, refs);
+        const [rowClass, badge] = getClassement(r.Temps, refs);
 
-    const pilotSec = timeToSeconds(r.Temps);
-    let ecart = "—";
-
-    if (i > 0 && leaderSec !== null && pilotSec !== null) {
-        ecart = `+${(pilotSec - leaderSec).toFixed(3)} s`;
-    }
-
-    return `
+        return `
         <tr class="${rowClass}">
             <td>${i + 1}</td>
             <td>
@@ -116,10 +100,9 @@ function updateTable() {
             </td>
             <td>${r.Catégorie}</td>
             <td>${r.Temps}</td>
-            <td class="gap">${ecart}</td>
         </tr>
-    `;
-}).join("");
+        `;
+    }).join("");
 }
 
 // Événements
