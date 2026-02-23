@@ -1,4 +1,4 @@
-const SHEET_URL = "https://opensheet.elk.sh/1zo5AMUtvPnzhq9YpuSU8gV6wlmpJXrORbcZOomWFaxc/Feuille 1";
+const SHEET_URL = "https://opensheet.elk.sh/ID_DU_SHEET/Feuille 1";
 
 const circuitSelect = document.getElementById("circuit");
 const categorySelect = document.getElementById("category");
@@ -13,8 +13,17 @@ fetch(SHEET_URL)
 const circuitImages = {
     "Bahrain": "img/bahrain.jpg",
     "Le Mans": "img/le-mans.jpg",
-    "Paul Ricard": "img/paul-ricard.jpg"
-    // Ajoute toutes les photos des circuits ici
+    "Paul Ricard": "img/paul-ricard.jpg",
+    "Cota": "img/Cota.jpg",
+    "Fuji": "img/Fuji.jpg",
+    "Imola": "img/Imola.jpg",
+    "Interlagos": "img/Interlagos.jpg",
+    "Lusail": "img/Lusail.jpg",
+    "Monza": "img/Monza.jpg",
+    "Portimao": "img/Portimao.jpg",
+    "Sebring": "img/Sebring.jpg",
+    "Silverstone": "img/Silverstone.jpg",
+    "Spa": "img/Spa.jpg",
 };
 
 const categoryIcons = {
@@ -34,35 +43,34 @@ function updateTable() {
         return;
     }
 
-    let filtered = data.filter(r => r.Circuit === circuit && r.Catégorie === category);
+    // Filtrer par circuit
+    let filtered = data.filter(r => r.Circuit === circuit);
 
-    const bestByPilot = [];
+    // Si une catégorie précise est choisie
+    if (category !== "ALL") {
+        filtered = filtered.filter(r => r.Catégorie === category);
+    }
+
+    // Meilleur temps par Pilote + Catégorie
+    const best = {};
     filtered.forEach(r => {
-        const existing = bestByPilot.find(e => e["Nom Prénom"] === r["Nom Prénom"]);
-        if (!existing) {
-            bestByPilot.push(r);
-        } else {
-            if (r.Temps < existing.Temps) {
-                const index = bestByPilot.indexOf(existing);
-                bestByPilot[index] = r;
-            }
+        const key = `${r["Nom Prénom"]}_${r.Catégorie}`;
+        if (!best[key] || r.Temps < best[key].Temps) {
+            best[key] = r;
         }
     });
 
-    const classement = bestByPilot.sort((a, b) => a.Temps.localeCompare(b.Temps));
+    const classement = Object.values(best)
+        .sort((a, b) => a.Temps.localeCompare(b.Temps));
 
     table.innerHTML = classement.map((r, i) => `
         <tr>
             <td>${i + 1}</td>
-            <td>
-                <img src="${circuitImages[r.Circuit]}" class="circuit-img" alt="${r.Circuit}">
-                <img src="${categoryIcons[r.Catégorie]}" class="cat-icon" alt="${r.Catégorie}">
-                ${r["Nom Prénom"]}
-            </td>
+            <td>${r["Nom Prénom"]}</td>
+            <td>${r.Catégorie}</td>
             <td>${r.Temps}</td>
         </tr>
     `).join("");
 }
-
 circuitSelect.addEventListener("change", updateTable);
 categorySelect.addEventListener("change", updateTable);

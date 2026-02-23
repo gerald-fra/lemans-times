@@ -1,53 +1,55 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Le Mans Times</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Le Mans Times</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>Le Mans Ultimate – Classements</h1>
+  <h1>Le Mans Ultimate – Classements</h1>
 
-    <div class="filters">
-        <select id="circuit">
-            <option value="">Choisir un circuit</option>
-            <option>Bahrain</option>
-            <option>Le Mans</option>
-            <option>Paul Ricard</option>
-            <option>COTA</option>
-      	    <option>Fuji</option>
-            <option>Imola</option>
-            <option>Interlagos</option>
-            <option>Lusail</option>
-            <option>Monza</option>
-            <option>Portimao</option>
-            <option>Sebring</option>
-            <option>Silverstone</option>
-            <option>Spa</option>
-        </select>
+  <div class="filters">
+    <select id="circuit">
+      <option value="">Choisir un circuit</option>
+      <option>Bahrain</option>
+      <option>Le Mans</option>
+      <option>Paul Ricard</option>
+      <option>COTA</option>
+      <option>Fuji</option>
+      <option>Imola</option>
+      <option>Interlagos</option>
+      <option>Lusail</option>
+      <option>Monza</option>
+      <option>Portimao</option>
+      <option>Sebring</option>
+      <option>Silverstone</option>
+      <option>Spa</option>
+    </select>
 
-        <select id="category">
-            <option value="">Choisir une catégorie</option>
-            <option>Hypercar</option>
-            <option>LMP2</option>
-            <option>GTE</option>
-            <option>GT3</option>
-            <option>LMP3</option>
-        </select>
-    </div>
+    <select id="category">
+      <option value="">Choisir une catégorie</option>
+      <option value="ALL">Toutes catégories</option>
+      <option>Hypercar</option>
+      <option>LMP2</option>
+      <option>GTE</option>
+      <option>GT3</option>
+      <option>LMP3</option>
+    </select>
+  </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Pilote</th>
-                <th>Temps</th>
-            </tr>
-        </thead>
-        <tbody id="table"></tbody>
-    </table>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Pilote</th>
+        <th>Catégorie</th>
+        <th>Temps</th>
+      </tr>
+    </thead>
+    <tbody id="table"></tbody>
+  </table>
 
-    <script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
