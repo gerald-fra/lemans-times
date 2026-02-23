@@ -23,7 +23,7 @@ const circuitImages = {
     "Portimao": "img/Portimao.png",
     "Sebring": "img/Sebring.png",
     "Silverstone": "img/Silverstone.jpg",
-    "Spa": "img/Spa.png",
+    "Spa": "img/Spa.png"
 };
 
 const categoryIcons = {
@@ -34,6 +34,15 @@ const categoryIcons = {
     "LMP3": "img/lmp3.png"
 };
 
+// 🔹 Détermine la classe + badge selon le temps
+function getClassement(time, refs) {
+    if (refs.plat && time <= refs.plat) return ["row-platinium", "PLATINIUM"];
+    if (refs.or && time <= refs.or) return ["row-or", "OR"];
+    if (refs.argent && time <= refs.argent) return ["row-argent", "ARGENT"];
+    if (refs.bronze && time <= refs.bronze) return ["row-bronze", "BRONZE"];
+    return ["row-out", "—"];
+}
+
 function updateTable() {
     const circuit = circuitSelect.value;
     const category = categorySelect.value;
@@ -43,20 +52,28 @@ function updateTable() {
         return;
     }
 
-    // Filtrer par circuit
+    // 1️⃣ Filtrer par circuit
     let filtered = data.filter(r => r.Circuit === circuit);
 
-    // Si une catégorie précise est choisie
+    // 2️⃣ Filtrer par catégorie (ou toutes)
     if (category !== "ALL") {
         filtered = filtered.filter(r => r.Catégorie === category);
     }
 
-    // Supprimer les lignes de référence (PLATINIUM / OR / ARGENT / BRONZE)
+    // 3️⃣ Lire les références AVANT suppression
+    const refs = {
+        plat: filtered.find(r => r["Nom Prénom"] === "PLATINIUM")?.Temps,
+        or: filtered.find(r => r["Nom Prénom"] === "OR")?.Temps,
+        argent: filtered.find(r => r["Nom Prénom"] === "ARGENT")?.Temps,
+        bronze: filtered.find(r => r["Nom Prénom"] === "BRONZE")?.Temps
+    };
+
+    // 4️⃣ Supprimer les lignes de référence
     filtered = filtered.filter(r =>
         !["PLATINIUM", "OR", "ARGENT", "BRONZE"].includes(r["Nom Prénom"])
     );
-   
-    // Meilleur temps par Pilote + Catégorie
+
+    // 5️⃣ Meilleur temps par pilote + catégorie
     const best = {};
     filtered.forEach(r => {
         const key = `${r["Nom Prénom"]}_${r.Catégorie}`;
@@ -68,17 +85,26 @@ function updateTable() {
     const classement = Object.values(best)
         .sort((a, b) => a.Temps.localeCompare(b.Temps));
 
-    table.innerHTML = classement.map((r, i) => `
-    <tr>
-        <td>${i + 1}</td>
-        <td>
-            <img src="${circuitImages[r.Circuit]}" class="circuit-img">
-            <img src="${categoryIcons[r.Catégorie]}" class="cat-icon">
-            ${r["Nom Prénom"]}
-        </td>
-        <td>${r.Catégorie}</td>
-        <td>${r.Temps}</td>
-    </tr>
-`).join("");
+    // 6️⃣ Affichage final
+    table.innerHTML = classement.map((r, i) => {
+        const [rowClass, badge] = getClassement(r.Temps, refs);
+
+        return `
+        <tr class="${rowClass}">
+            <td>${i + 1}</td>
+            <td>
+                <img src="${circuitImages[r.Circuit]}" class="circuit-img">
+                <img src="${categoryIcons[r.Catégorie]}" class="cat-icon">
+                ${r["Nom Prénom"]}
+                <span class="badge badge-${badge.toLowerCase()}">${badge}</span>
+            </td>
+            <td>${r.Catégorie}</td>
+            <td>${r.Temps}</td>
+        </tr>
+        `;
+    }).join("");
+}
+
+// Événements
 circuitSelect.addEventListener("change", updateTable);
 categorySelect.addEventListener("change", updateTable);

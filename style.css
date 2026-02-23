@@ -59,3 +59,46 @@ tr:nth-child(even) {
     vertical-align: middle;
     margin-right: 5px;
 }
+
+/* Couleurs classement */
+.row-platinium {
+    background: linear-gradient(90deg, #b993ff, #6a00ff);
+    color: white;
+}
+
+.row-or {
+    background: #f5c542;
+    color: #000;
+}
+
+.row-argent {
+    background: #cfd2d6;
+    color: #000;
+}
+
+.row-bronze {
+    background: #cd7f32;
+    color: #000;
+}
+
+.row-out {
+    background: #2a2a2a;
+}
+
+/* Badge */
+.badge {
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+.badge-platinium { background: #6a00ff; color: white; }
+.badge-or { background: #f5c542; color: black; }
+.badge-argent { background: #cfd2d6; color: black; }
+.badge-bronze { background: #cd7f32; color: black; }
+
+tr:hover:not(.row-platinium):not(.row-or):not(.row-argent):not(.row-bronze) {
+    background: #2a2f40;
+}
