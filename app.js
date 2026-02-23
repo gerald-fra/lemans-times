@@ -11,19 +11,19 @@ fetch(SHEET_URL)
     .then(rows => data = rows);
 
 const circuitImages = {
-    "Bahrain": "img/bahrain.jpg",
-    "Le Mans": "img/le-mans.jpg",
+    "Bahrain": "img/Bahrain.png",
+    "Le Mans": "img/Le-mans.png",
     "Paul Ricard": "img/paul-ricard.jpg",
-    "Cota": "img/Cota.jpg",
-    "Fuji": "img/Fuji.jpg",
+    "Cota": "img/Cota.png",
+    "Fuji": "img/Fuji.png",
     "Imola": "img/Imola.jpg",
     "Interlagos": "img/Interlagos.jpg",
     "Lusail": "img/Lusail.jpg",
-    "Monza": "img/Monza.jpg",
-    "Portimao": "img/Portimao.jpg",
-    "Sebring": "img/Sebring.jpg",
+    "Monza": "img/Monza.png",
+    "Portimao": "img/Portimao.png",
+    "Sebring": "img/Sebring.png",
     "Silverstone": "img/Silverstone.jpg",
-    "Spa": "img/Spa.jpg",
+    "Spa": "img/Spa.png",
 };
 
 const categoryIcons = {
@@ -51,6 +51,11 @@ function updateTable() {
         filtered = filtered.filter(r => r.Catégorie === category);
     }
 
+    // Supprimer les lignes de référence (PLATINIUM / OR / ARGENT / BRONZE)
+    filtered = filtered.filter(r =>
+        !["PLATINIUM", "OR", "ARGENT", "BRONZE"].includes(r["Nom Prénom"])
+    );
+   
     // Meilleur temps par Pilote + Catégorie
     const best = {};
     filtered.forEach(r => {
@@ -64,13 +69,16 @@ function updateTable() {
         .sort((a, b) => a.Temps.localeCompare(b.Temps));
 
     table.innerHTML = classement.map((r, i) => `
-        <tr>
-            <td>${i + 1}</td>
-            <td>${r["Nom Prénom"]}</td>
-            <td>${r.Catégorie}</td>
-            <td>${r.Temps}</td>
-        </tr>
-    `).join("");
-}
+    <tr>
+        <td>${i + 1}</td>
+        <td>
+            <img src="${circuitImages[r.Circuit]}" class="circuit-img">
+            <img src="${categoryIcons[r.Catégorie]}" class="cat-icon">
+            ${r["Nom Prénom"]}
+        </td>
+        <td>${r.Catégorie}</td>
+        <td>${r.Temps}</td>
+    </tr>
+`).join("");
 circuitSelect.addEventListener("change", updateTable);
 categorySelect.addEventListener("change", updateTable);
