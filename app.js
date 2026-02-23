@@ -1,4 +1,4 @@
-const SHEET_URL = "https://opensheet.elk.sh/ID_DU_SHEET/Feuille 1";
+const SHEET_URL = "https://opensheet.elk.sh/1zo5AMUtvPnzhq9YpuSU8gV6wlmpJXrORbcZOomWFaxc/Feuille 1";
 
 const circuitSelect = document.getElementById("circuit");
 const categorySelect = document.getElementById("category");
@@ -30,7 +30,7 @@ const categoryIcons = {
     "Hypercar": "img/hypercar.png",
     "LMP2": "img/lmp2.png",
     "GTE": "img/gte.png",
-    "GT3": "img/gt3.png",
+    "LMGT3": "img/lmgt3.png",
     "LMP3": "img/lmp3.png"
 };
 
